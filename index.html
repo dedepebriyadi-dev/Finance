@@ -415,10 +415,10 @@ document.getElementById("addT").onclick=function(){S.m[cur].exp.push({n:"",a:"",
 function route(){var h=location.hash.slice(1);view=MENU.some(function(x){return x[0]===h})?h:"dashboard";render()}
 window.addEventListener("hashchange",route);route();
 (async function(){
-  var SUPABASE_URL="GANTI_DENGAN_PROJECT_URL_ANDA";
-  var SUPABASE_KEY="GANTI_DENGAN_ANON_PUBLIC_KEY_ANDA";
-  if(!window.supabase||SUPABASE_URL.indexOf("GANTI_DENGAN_")===0||SUPABASE_KEY.indexOf("GANTI_DENGAN_")===0){
-    st("Tersimpan di browser perangkat ini (isi URL & Key Supabase)");return}
+  var SUPABASE_URL="https://nqfiirybsgpwebwriqif.supabase.co";
+  var SUPABASE_KEY="sb_publishable_04PIC0oSnd6ZLF_LFUtL7w_-mOGmPL-";
+  if(!window.supabase||SUPABASE_URL.indexOf("sb_publishable_04PIC0oSnd6ZLF_LFUtL7w_-mOGmPL-")===0||SUPABASE_KEY.indexOf("...")>=0){
+    st("Tersimpan di browser perangkat ini sb_publishable_04PIC0oSnd6ZLF_LFUtL7w_-mOGmPL-");return}
   try{
     sbClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
     st("Menyinkronkan…");
