@@ -417,8 +417,8 @@ window.addEventListener("hashchange",route);route();
 (async function(){
   var SUPABASE_URL="https://nqfiirybsgpwebwriqif.supabase.co";
   var SUPABASE_KEY="sb_publishable_04PIC0oSnd6ZLF_LFUtL7w_-mOGmPL-";
-  if(!window.supabase||SUPABASE_URL.indexOf("sb_publishable_04PIC0oSnd6ZLF_LFUtL7w_-mOGmPL-")===0||SUPABASE_KEY.indexOf("...")>=0){
-    st("Tersimpan di browser perangkat ini sb_publishable_04PIC0oSnd6ZLF_LFUtL7w_-mOGmPL-");return}
+  if(!window.supabase||SUPABASE_URL.indexOf("GANTI_DENGAN_")===0||SUPABASE_KEY.indexOf("...")>=0){
+    st("Tersimpan di browser perangkat ini (lengkapi Publishable Key)");return}
   try{
     sbClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
     st("Menyinkronkan…");
