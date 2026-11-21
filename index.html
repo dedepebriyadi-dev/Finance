@@ -55,7 +55,7 @@ select option{color:#14201a;background:#fff}
 .ph{color:var(--mut);padding:8px 0}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .row{display:grid;gap:6px;margin-bottom:6px;align-items:center}
-.ri{grid-template-columns:1fr 120px 30px}.re{grid-template-columns:1fr 110px 130px 30px}.rc{grid-template-columns:1fr 64px 92px 30px}
+.ri{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr) 30px}.re{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) 124px 30px}.rc{grid-template-columns:1fr 64px 92px 30px}
 .x{background:none;border:1px solid var(--bd);border-radius:8px;color:var(--mut);cursor:pointer;padding:6px 8px}
 .add{width:100%;margin-top:6px;background:none;border:1px dashed var(--hl);border-radius:8px;padding:9px;cursor:pointer}
 .add.in{width:auto;margin:0 6px 0 0;padding:8px 14px}
@@ -115,12 +115,12 @@ summary{cursor:pointer;font-weight:bold;padding:4px 0}
 .ct{position:absolute;top:12px;right:12px;width:28px;height:28px;border:1px solid var(--bd);border-radius:8px;background:transparent;color:var(--mut);cursor:pointer;font-size:14px;padding:0;line-height:1}
 .hero .ct{color:#fff;border-color:rgba(255,255,255,.55)}
 .c:has(>h3.cl)>*:not(h3){display:none}.c:has(>h3.cl)>h3{margin-bottom:0}
-.rx{grid-template-columns:1fr 96px 124px 30px}
+.rx{grid-template-columns:96px minmax(0,.8fr) minmax(0,1.3fr) 30px}
 .rst{display:flex;gap:10px;flex-wrap:wrap}.rst button{border:1px solid var(--bad);color:var(--bad);background:transparent;border-radius:10px;padding:9px 14px;cursor:pointer}.rst button.on{background:var(--bad);color:#fff}
 .gg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin:6px 0}.gg svg{width:100%;max-width:130px}.gg small{display:block;font-size:10px;color:var(--mut)}.gg b{font-size:12px}
 .lgd{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--mut);margin:6px 0 14px}
 .yr{display:flex;gap:8px;align-items:center;margin-bottom:8px}.yr input{width:90px}
-@media (max-width:620px){.rx{grid-template-columns:1fr 80px 100px 30px}}
+@media (max-width:620px){.rx{grid-template-columns:82px minmax(0,.8fr) minmax(0,1.3fr) 30px}}
 .bnav{display:none}
 @media (max-width:980px){
  .shell,.shell.nc{grid-template-columns:1fr;margin:0;border-radius:0;padding:8px 8px 76px}.tgl{display:none}
@@ -129,7 +129,41 @@ summary{cursor:pointer;font-weight:bold;padding:4px 0}
  .bnav a{flex:1;text-align:center;color:var(--mut);text-decoration:none;padding:6px 0;border-radius:10px;font-size:9.5px;min-width:0;overflow:hidden;white-space:nowrap}.bnav a.on{color:var(--g1);font-weight:bold}.bnav a{display:flex;flex-direction:column;align-items:center;gap:3px}
  .cards{grid-template-columns:1fr 1fr}.main{padding:14px}h1{font-size:24px}.s3,.s4{grid-column:span 2}
 }
-@media (max-width:620px){.cards{grid-template-columns:1fr}.s2,.s3,.s4{grid-column:auto}.r2{grid-row:auto}.two{grid-template-columns:1fr}.re{grid-template-columns:1fr 90px 110px 30px}}
+@media (max-width:620px){.cards{grid-template-columns:1fr}.s2,.s3,.s4{grid-column:auto}.r2{grid-row:auto}.two{grid-template-columns:1fr}.re{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) 100px 30px}}
+
+/* ===== revisi tipografi & mobile fit ===== */
+body{line-height:1.5}
+.c h3{font-size:17px;line-height:1.35;margin:0 0 12px}
+.c b{font-size:1.1em}
+.c p{line-height:1.6;margin:6px 0 12px}
+.mut{line-height:1.55}
+.sub{font-size:15px}
+.chip{font-size:12.5px;line-height:1.5}
+.tg small{font-size:13px;line-height:1.55}.tg .h b{font-size:16px}
+.it .ir span{font-size:12.5px}
+.tb:not(.rk) th{font-size:13px}
+.gg{gap:12px}.gg svg{margin:6px 0}.gg small{display:block;font-size:12.5px;line-height:1.5;margin-top:10px}.gg>div>b{display:block;margin:2px 0}
+.lgd{font-size:12.5px;line-height:1.7;gap:8px 18px;margin:10px 0 18px}
+.ri input,.re input,.rx input{padding:8px 7px}
+.sh{display:none}
+.tb.sis{table-layout:fixed;min-width:0}.sis th:nth-child(1),.sis td:nth-child(1){width:10%}.sis th:nth-child(2),.sis td:nth-child(2){width:30%;overflow-wrap:anywhere}
+@media (max-width:620px){
+ .tb.tgt,.tb.tgt tbody{display:block;width:100%;min-width:0}
+ .tb.tgt tr.ih{display:none}
+ .tb.tgt tr{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 0;border-bottom:1px solid var(--bd)}
+ .tb.tgt td{display:block;height:auto;border:0;padding:0}
+ .tb.tgt td.tn{grid-column:1/3;font-weight:bold;color:var(--mut);font-size:13px}.tb.tgt td.tn::before{content:"Target "}
+ .tb.tgt td:nth-child(2),.tb.tgt td.tp{grid-column:1/3}
+ .tb.tgt td.tk{grid-column:1/2;display:flex;gap:8px;align-items:center}.tb.tgt td.del{grid-column:2/3;text-align:right}
+ .tb.tgt td[data-l]:not(.tn)::before{content:attr(data-l);display:block;font-size:12px;color:var(--mut);margin-bottom:3px}
+ .tb.tgt td.tk::before{margin:0}
+ .sis td,.sis th{font-size:11px;padding:6px 3px;height:auto}
+ .tw{gap:6px}.tb.jl{width:46px;min-width:0}.tb.jl td,.tb.jl th{padding:4px 3px;font-size:12px}
+ .tw .sc:last-child{overflow:visible;min-width:0}.tb.jr{table-layout:fixed;width:100%;min-width:0}.jr th{min-width:0}.jr th:nth-child(1){width:56%}
+ .jr input{font-size:12px;padding:6px 4px}.jr td,.jr th{padding:4px 3px;font-size:12px}
+ .fl{display:none}.sh{display:inline}
+ details{padding:8px}
+}
 </style>
 </head>
 <body>
@@ -253,7 +287,7 @@ function vDash(){
 function vTrx(){var d=S.m[cur],b="m."+cur;
   var I=d.inc.map(function(x,k){return '<div class="row ri">'+In(b+".inc."+k+".n",x.n,{ph:"Sumber"})+In(b+".inc."+k+".a",x.a,{m:1,ph:"0,00"})+Btn("delI",k,"✕")+'</div>'}).join("");
   var E=d.exp.map(function(x,k){return '<div class="row re">'+In(b+".exp."+k+".n",x.n,{ph:"Pengeluaran"})+In(b+".exp."+k+".a",x.a,{m:1,ph:"0,00"})+CatSel(b+".exp."+k+".c",x.c)+Btn("delE",k,"✕")+'</div>'}).join("");
-  var X='<div class="row rx mut" style="font-size:11px"><span>Keterangan</span><span>Tanggal</span><span>Nominal</span><span></span></div>'+d.ex.map(function(x,k){return '<div class="row rx">'+In(b+".ex."+k+".n",x.n,{ph:"Bunga, dividen, dll"})+In(b+".ex."+k+".t",x.t||"",{d:1,ph:"00/00/00"})+In(b+".ex."+k+".a",x.a,{m:1,ph:"0,00"})+Btn("delX",k,"✕")+'</div>'}).join("");
+  var X='<div class="row rx mut" style="font-size:11px"><span>Tanggal</span><span>Keterangan</span><span>Nominal</span><span></span></div>'+d.ex.map(function(x,k){return '<div class="row rx">'+In(b+".ex."+k+".t",x.t||"",{d:1,ph:"00/00/00"})+In(b+".ex."+k+".n",x.n,{ph:"Keterangan"})+In(b+".ex."+k+".a",x.a,{m:1,ph:"0,00"})+Btn("delX",k,"✕")+'</div>'}).join("");
   return '<div class="two"><div class="c"><h3>Pemasukan · '+MO[cur]+'</h3>'+I+Btn("addI","","+ Tambah pemasukan","add")+'</div><div class="c"><h3>Pengeluaran · '+MO[cur]+'</h3>'+E+Btn("addE","","+ Tambah pengeluaran","add")+'<p class="mut">Transaksi berkategori Tabungan tidak dihitung sebagai pengeluaran, otomatis masuk ke Total Tabungan.</p></div></div>'+
    '<div class="c"><h3>Pendapatan Tambahan untuk Tabungan · '+MO[cur]+'</h3><p class="mut">Bunga, dividen, pengembalian dana, iuran, dan sejenisnya. Langsung menambah Total Tabungan dan tidak dihitung sebagai pemasukan atau pengeluaran.</p>'+X+Btn("addX","","+ Tambah pendapatan","add")+'</div>'+resetCard()}
 function resetCard(){return '<div class="c"><h3>Reset Transaksi</h3><p class="mut">Gunakan saat tahun berganti. Reset bulan hanya menghapus transaksi bulan '+MO[cur]+' (pemasukan, pengeluaran, pendapatan tambahan, dan anggaran bulan itu). Reset semua bulan menghapus seluruh transaksi 12 bulan; setoran tabungan dan pendapatan tambahan otomatis dipindahkan ke Saldo Awal Tabungan agar total tabungan tidak hilang. Tekan dua kali untuk konfirmasi.</p><div class="rst"><button class="'+(pend==="m"?"on":"")+'" data-act="rstM" data-x="">'+(pend==="m"?"Klik lagi untuk menghapus "+MO[cur]:"Reset "+MO[cur])+'</button><button class="'+(pend==="y"?"on":"")+'" data-act="rstY" data-x="">'+(pend==="y"?"Klik lagi untuk menghapus semua bulan":"Reset semua bulan (ganti tahun)")+'</button></div></div>'}
@@ -263,13 +297,13 @@ function svTotal(){var t=num(S.sv0);for(var i=0;i<12;i++){var q=sums(i);t+=q.sv+
 function vSv(){var sg=0,xg=0;for(var i=0;i<12;i++){var q=sums(i);sg+=q.sv;xg+=q.ex}
   var tot=num(S.sv0)+sg+xg,al=S.tg.reduce(function(a,r){return a+num(r.a)},0);
   var T=S.tg.map(function(r,k){var pc=num(r.t)>0?Math.min(100,Math.round(num(r.a)/num(r.t)*100)):0;
-    return '<tr class="'+(dn(r)?"dn":"")+'"><td>'+(k+1)+'</td><td>'+In("tg."+k+".n",r.n,{ph:"Nama target"})+'</td><td>'+In("tg."+k+".a",r.a,{m:1,ph:"0,00"})+'</td><td>'+In("tg."+k+".t",r.t,{m:1,ph:"0,00"})+'</td><td style="min-width:120px"><div class="pb"><i style="width:'+pc+'%"></i></div><small>'+pc+'%</small></td><td><input type="checkbox" disabled'+(dn(r)?" checked":"")+'></td><td>'+Btn("delT",k,"✕")+'</td></tr>'}).join("");
-  var R=S.tg.map(function(r,k){return '<tr class="'+(dn(r)?"dn":"")+'"><td>'+(k+1)+'</td><td>'+esc(r.n||"-")+'</td><td class="num">'+rp(num(r.a))+'</td><td class="num">'+rp(Math.max(0,num(r.t)-num(r.a)))+'</td></tr>'}).join("");
+    return '<tr class="'+(dn(r)?"dn":"")+'"><td class="tn" data-l="Target">'+(k+1)+'</td><td data-l="Nama target">'+In("tg."+k+".n",r.n,{ph:"Nama target"})+'</td><td data-l="Terkumpul (Rp)">'+In("tg."+k+".a",r.a,{m:1,ph:"0,00"})+'</td><td data-l="Nominal target (Rp)">'+In("tg."+k+".t",r.t,{m:1,ph:"0,00"})+'</td><td class="tp" data-l="Persen"><div class="pb"><i style="width:'+pc+'%"></i></div><small>'+pc+'%</small></td><td class="tk" data-l="Tercapai"><input type="checkbox" disabled'+(dn(r)?" checked":"")+'></td><td class="del">'+Btn("delT",k,"✕")+'</td></tr>'}).join("");
+  var R=S.tg.map(function(r,k){return '<tr class="'+(dn(r)?"dn":"")+'"><td>'+(k+1)+'</td><td>'+esc(r.n||"-")+'</td><td class="num">'+fm2(num(r.a))+'</td><td class="num">'+fm2(Math.max(0,num(r.t)-num(r.a)))+'</td></tr>'}).join("");
   return '<div class="cards" style="margin-bottom:12px"><div class="c hero s2"><h3>Total Tabungan Tersimpan</h3><div class="big">'+rp(tot)+'</div><span class="chip">Saldo awal + setoran (kategori Tabungan) + pendapatan tambahan</span></div><div class="c"><h3>Terkumpul di Target</h3><div class="big">'+rp(al)+'</div></div><div class="c"><h3>Sisa Tabungan</h3><div class="big '+(tot-al>=0?"good":"badc")+'">'+rp(tot-al)+'</div></div></div>'+
    '<div class="two"><div class="c"><h3>Saldo Awal Tabungan</h3><p class="mut">Isi saldo tabungan yang sudah Anda punya. Langsung masuk ke Total Tabungan.</p><div style="max-width:300px">'+In("sv0",S.sv0,{m:1,ph:"0,00"})+'</div></div>'+
    '<div class="c"><h3>Rincian Total Tabungan</h3><table class="tb" style="min-width:0"><tr><td>Saldo awal</td><td class="num">'+rp(num(S.sv0))+'</td></tr><tr><td>Setoran dari transaksi</td><td class="num">'+rp(sg)+'</td></tr><tr><td>Pendapatan tambahan</td><td class="num">'+rp(xg)+'</td></tr></table><div class="big" style="margin-top:8px">Total: '+rp(tot)+'</div></div></div>'+
-   '<div class="c"><h3>Target yang Ingin Dicapai</h3><div class="sc"><table class="tb"><tr><th>No</th><th>Target</th><th>Terkumpul (Rp)</th><th>Nominal Target (Rp)</th><th>Persen</th><th>✓</th><th></th></tr>'+T+'</table></div>'+Btn("addT","","+ Tambah target","add")+'<p class="mut">Angka di tabel ini bagian dari tabungan, tidak menambah atau mengurangi total tabungan.</p></div>'+
-   '<div class="c"><h3>Sisa Tabungan</h3><div class="sc"><table class="tb"><tr><th>No</th><th>Target</th><th class="num">Terkumpul</th><th class="num">Kekurangan</th></tr>'+R+'<tfoot><tr><td></td><td>Total tabungan</td><td class="num">'+rp(tot)+'</td><td></td></tr><tr><td></td><td>Terkumpul di target</td><td class="num">'+rp(al)+'</td><td></td></tr><tr><td></td><td>Sisa tabungan</td><td class="num">'+rp(tot-al)+'</td><td></td></tr></tfoot></table></div></div>'}
+   '<div class="c"><h3>Target yang Ingin Dicapai</h3><div class="sc"><table class="tb tgt"><tr class="ih"><th>No</th><th>Target</th><th>Terkumpul (Rp)</th><th>Nominal Target (Rp)</th><th>Persen</th><th>✓</th><th></th></tr>'+T+'</table></div>'+Btn("addT","","+ Tambah target","add")+'<p class="mut">Angka di tabel ini bagian dari tabungan, tidak menambah atau mengurangi total tabungan.</p></div>'+
+   '<div class="c"><h3>Sisa Tabungan</h3><div class="sc"><table class="tb sis"><tr><th>No</th><th>Target</th><th class="num">Terkumpul (Rp)</th><th class="num">Kekurangan (Rp)</th></tr>'+R+'<tfoot><tr><td></td><td>Total tabungan</td><td class="num">'+fm2(tot)+'</td><td></td></tr><tr><td></td><td>Terkumpul di target</td><td class="num">'+fm2(al)+'</td><td></td></tr><tr><td></td><td>Sisa tabungan</td><td class="num">'+fm2(tot-al)+'</td><td></td></tr></tfoot></table></div></div>'}
 
 function itot(r){return num(r[1])+num(r[2])-num(r[3])}
 function vInv(){var R=S.inv.rows,sm=[0,0,0,0];
@@ -289,7 +323,7 @@ function vJht(){var J=S.jht;J.years.forEach(jyear);
   var IU=jcalc(),last=J.years[J.years.length-1];
   var Y=J.years.map(function(y){var d=jyear(y),iu=IU[y],tot=iu.reduce(function(a,v){return a+num(v)},0);
     var open=openY[y]!==undefined?openY[y]:(y===last),empty=d.every(function(r){return r[0]===""||r[0]==null});
-    var L=MO.map(function(m){return '<tr><td>'+m+'</td></tr>'}).join("")+'<tfoot><tr><td>Total</td></tr></tfoot>';
+    var L=MO.map(function(m){return '<tr><td><span class="fl">'+m+'</span><span class="sh">'+m.slice(0,3)+'</span></td></tr>'}).join("")+'<tfoot><tr><td>Total</td></tr></tfoot>';
     var R=d.map(function(r,i){var u=iu[i];return '<tr><td>'+In("jht.data."+y+"."+i+".0",r[0],{m:1,ph:"0,00",j:y+"-"+i+"-0"})+'</td><td class="num">'+(u===""?'<span class="mut">-</span>':'<b class="'+(u>=0?"good":"badc")+'">'+fm2(u)+'</b>')+'</td></tr>'}).join("")+'<tfoot><tr><td></td><td class="num">'+fm2(tot)+'</td></tr></tfoot>';
     var bar='<div class="yr"><label class="mut">Tahun</label><input type="text" inputmode="numeric" maxlength="4" data-yr="'+y+'" value="'+y+'" aria-label="Tahun">'+((empty&&J.years.length>1)?Btn("delYr",y,"Hapus tahun"):"")+'</div>';
     return '<details data-y="'+y+'"'+(open?" open":"")+'><summary>Tahun '+y+' · Iuran '+rp(tot)+'</summary>'+bar+'<div class="tw" style="margin-top:8px"><div class="sc"><table class="tb jl"><tr><th>Bulan</th></tr>'+L+'</table></div><div class="sc"><table class="tb jr"><tr><th>Saldo Terkini</th><th>Iuran</th></tr>'+R+'</table></div></div></details>'}).join("");
@@ -367,7 +401,8 @@ function morph(a,b){
   }
   while(a.childNodes.length>b.childNodes.length)a.removeChild(a.lastChild)}
 function paint(html,key){var t=document.createElement("template");t.innerHTML=html;if(V.__k!==key){V.innerHTML=html;V.__k=key}else morph(V,t.content)}
-function addCt(h){return h.replace(/<h3>(.*?)<\/h3>/g,function(m,t){var key=view+"_"+t.replace(/<[^>]*>/g,"").replace(/ · .*$/,"").replace(/[^A-Za-z0-9]+/g,"_");return '<h3 class="h3c'+(COL[key]?" cl":"")+'">'+t+'<button class="ct" data-act="tgc" data-x="'+key+'" aria-label="Sempitkan atau lebarkan kartu" title="Sempitkan / lebarkan kartu">☰</button></h3>'})}
+var NOCT=["Total Pemasukan","Total Pengeluaran","Sisa Saldo","Tingkat Menabung","Total Tabungan Tersimpan","Sisa Tabungan","Total Saldo JHT Tercatat","Tabel JHT per Tahun","Total Anggaran","Anggaran Tercentang"];
+function addCt(h){return h.replace(/<h3>(.*?)<\/h3>/g,function(m,t){var plain=t.replace(/<[^>]*>/g,"").replace(/ · .*$/,"");if(view==="rekap"||NOCT.indexOf(plain)>=0)return "<h3>"+t+"</h3>";var key=view+"_"+plain.replace(/[^A-Za-z0-9]+/g,"_");return '<h3 class="h3c'+(COL[key]?" cl":"")+'">'+t+'<button class="ct" data-act="tgc" data-x="'+key+'" aria-label="Sempitkan atau lebarkan kartu" title="Sempitkan / lebarkan kartu">☰</button></h3>'})}
 function render(){
   var m=MENU.filter(function(x){return x[0]===view})[0];
   document.getElementById("ttl").textContent=m[2];document.getElementById("sub").textContent=m[3];

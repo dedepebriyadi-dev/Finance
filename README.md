@@ -1,29 +1,39 @@
 # Dompetku – Budgeting Keuangan
 
-Aplikasi budgeting keuangan satu halaman (HTML, CSS, dan JavaScript saja, tanpa library luar).
-Fitur: dashboard, transaksi, tabungan dan target, investasi, JHT BPJS, rekap 3 bulan.
+Aplikasi budgeting keuangan satu halaman (HTML, CSS, JavaScript). Fitur: dashboard, transaksi, tabungan dan target, investasi, JHT BPJS, anggaran dan hutang, rekap 3 bulan.
 
-## Catatan penting
-- Data disimpan di **localStorage browser** pada perangkat yang dipakai. Data di laptop dan HP **tidak otomatis sinkron**, dan data hilang jika cache browser dihapus.
-- Untuk sinkron antar perangkat, aplikasi perlu database online (misalnya Supabase atau Firebase).
+## Penyimpanan data
+- Data disimpan di **browser** (localStorage) dan disinkronkan ke **Supabase** (tabel `dompetku_data`, satu baris dengan `id` sesuai `USER_RECORD_ID` di `index.html`).
+- Jika Supabase tidak terhubung, aplikasi tetap jalan dan data tersimpan di browser perangkat itu saja.
+- Pengaturan Supabase ada di bagian bawah `index.html`: `SUPABASE_URL` dan `SUPABASE_KEY` (gunakan *Publishable key*, bukan *secret key*).
+
+### Tabel Supabase (SQL Editor)
+```sql
+create table if not exists dompetku_data (
+  id text primary key,
+  data jsonb not null,
+  updated_at timestamptz default now()
+);
+alter table dompetku_data enable row level security;
+create policy "dompetku akses" on dompetku_data
+  for all using (true) with check (true);
+```
+Catatan keamanan: kebijakan di atas membuat siapa pun yang membuka situs dapat membaca dan mengubah baris data yang sama. Untuk data pribadi, sebaiknya tambahkan login (Supabase Auth) lalu batasi kebijakan ke pemilik data.
 
 ## Cara publish ke GitHub Pages
-1. Buat repository baru di github.com (misalnya `dompetku`), tanpa README bawaan.
-2. Di komputer, buka terminal di folder ini lalu jalankan:
+1. Buat repository baru di github.com (misalnya `dompetku`).
+2. Di terminal, dari folder ini:
 
 ```bash
 git init
 git add .
-git commit -m "Dompetku: versi pertama"
+git commit -m "Dompetku"
 git branch -M main
 git remote add origin https://github.com/USERNAME/dompetku.git
 git push -u origin main
 ```
 
-Ganti `USERNAME` dengan nama akun GitHub Anda.
-
-3. Di GitHub, buka **Settings → Pages**.
-4. Pada **Build and deployment**, pilih **Source: Deploy from a branch**, **Branch: main**, folder **/ (root)**, lalu **Save**.
-5. Tunggu 1–2 menit. Alamatnya: `https://USERNAME.github.io/dompetku/`
+3. Di GitHub: **Settings → Pages → Source: Deploy from a branch → Branch: main → / (root) → Save**.
+4. Alamatnya: `https://USERNAME.github.io/dompetku/`
 
 Untuk memperbarui: ubah `index.html`, lalu `git add . && git commit -m "update" && git push`.
