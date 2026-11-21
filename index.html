@@ -149,6 +149,7 @@ summary{cursor:pointer;font-weight:bold;padding:4px 0}
  </section>
 </div>
 <nav class="bnav" id="bn"></nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 var MO=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 var MS="JFMAMJJASOND".split("");
@@ -165,7 +166,7 @@ function norm(d){var b=blank();if(!d)return b;try{
  if(d.jht&&d.jht.cols&&d.jht.years){b.jht=d.jht;b.jht.data=b.jht.data||{};if(b.jht.cols.length!==1){for(var y in b.jht.data)b.jht.data[y]=(b.jht.data[y]||[]).map(function(r){return [(r||[]).reduce(function(a,v){return a+num(v)},0)||""]})}b.jht.cols=["Saldo Terkini"];if(!b.jht.v){b.jht.years=b.jht.years.filter(function(y,i){return i===0||(b.jht.data[y]||[]).some(function(r){return r&&r[0]!==""&&r[0]!=null})});b.jht.v=2}b.jht.years=b.jht.years.map(Number).sort(function(a,c){return a-c});if(!b.jht.years.length)b.jht.years=[2025]}
 }catch(e){}return b}
 var S;try{S=norm(JSON.parse(localStorage.getItem("dompetku")||"null"))}catch(e){S=blank()}
-var cur=new Date().getMonth(),view="dashboard",ref=null,tm=null,openY={},pend=null,COL={};try{COL=JSON.parse(localStorage.getItem("dompetku_cl")||"{}")}catch(e){}
+var cur=new Date().getMonth(),view="dashboard",sbClient=null,USER_RECORD_ID="dede_dompetku_utama",tm=null,openY={},pend=null,COL={};try{COL=JSON.parse(localStorage.getItem("dompetku_cl")||"{}")}catch(e){}
 var V=document.getElementById("v");
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function fm2(v){return v===""||v==null?"":(Math.round(+v*100)/100).toLocaleString("id-ID",{minimumFractionDigits:2,maximumFractionDigits:2})}
@@ -174,8 +175,17 @@ function num(x){return +x||0}
 function st(t){document.getElementById("st").textContent=t}
 function save(){
   try{localStorage.setItem("dompetku",JSON.stringify(S))}catch(e){}
-  if(!ref)return;st("Menyimpan…");clearTimeout(tm);
-  tm=setTimeout(function(){ref.set(JSON.parse(JSON.stringify(S))).then(function(){st("Tersinkron di semua perangkat ✓")},function(){st("Gagal sinkron, tersimpan di perangkat ini")})},700)}
+  if(!sbClient)return;st("Menyimpan…");clearTimeout(tm);
+  tm=setTimeout(async function(){
+    var payload=JSON.parse(JSON.stringify(S));
+    var res=await sbClient.from("dompetku_data").upsert({
+      id:USER_RECORD_ID,
+      data:payload,
+      updated_at:new Date().toISOString()
+    });
+    if(res.error){st("Gagal sinkron, tersimpan di perangkat ini");console.error(res.error.message)}
+    else{st("Tersinkron di semua perangkat ✓")}
+  },700)}
 function cat(id){return S.cats.filter(function(c){return c.id===id})[0]||S.cats.filter(function(c){return c.id===1})[0]||S.cats[0]}
 function ci(id){return Math.max(0,S.cats.indexOf(cat(id)))}
 function sums(i){var d=S.m[i],r={i:0,e:0,c:{},sv:0,ex:0,bud:0,n:d.inc.length+d.exp.length+d.ex.length+d.bud.length};
@@ -312,7 +322,7 @@ function vRekap(){var ms=[(cur+10)%12,(cur+11)%12,cur],lb=["2 bulan lalu","1 bul
 function vAng(){var s=sums(cur),d=S.m[cur],b="m."+cur;
   var ft=S.bfix.reduce(function(a,r){return a+num(r.a)},0),mt=d.bud.reduce(function(a,r){return a+num(r.a)},0),tot=ft+mt,ht=S.debt.reduce(function(a,r){return a+num(r.a)},0);
   var F=S.bfix.map(function(r,k){return '<tr><td>'+In("bfix."+k+".n",r.n,{ph:"Jenis anggaran"})+'</td><td>'+In("bfix."+k+".a",r.a,{m:1,ph:"0,00"})+'</td><td><div class="ck3"><input type="checkbox" data-p="'+b+'.fc.'+r.id+'"'+(d.fc[r.id]?" checked":"")+' aria-label="Centang jika dipakai bulan ini">'+Btn("delF",k,"✕")+'</div></td></tr>'}).join("");
-  var B=d.bud.map(function(r,k){return '<tr><td>'+In(b+".bud."+k+".n",r.n,{ph:"Jenis anggaran"})+'</td><td>'+In(b+".bud."+k+".a",r.a,{m:1,ph:"0,00"})+'</td><td><div class="ck3"><input type="checkbox" data-p="'+b+'.bud.'+k+'.d"'+(r.d?" checked":"")+' aria-label="Centang jika dipakai">'+Btn("delB",k,"✕")+'</div></td></tr>'}).join("");
+  var B=d.bud.map(function(r,k){return '<tr><td>'+In(b+".bud."+k+".n",r.n,{ph:"Jenis anggaran"})+'</td><td>'+In(b+".bud."+k+".a",r.a,{m:1,ph:"0,00"})+'</td><td><div class="ck3"><input type="checkbox" data-p="'+b+".bud."+k+".d"+'"'+(r.d?" checked":"")+' aria-label="Centang jika dipakai">'+Btn("delB",k,"✕")+'</div></td></tr>'}).join("");
   var H=S.debt.map(function(r,k){return '<tr><td>'+In("debt."+k+".n",r.n,{ph:"Catatan"})+'</td><td><div class="hd">'+In("debt."+k+".a",r.a,{m:1,ph:"0,00"})+Btn("delD",k,"✕")+'</div></td></tr>'}).join("");
   return '<div class="cards" style="margin-bottom:12px"><div class="c"><h3>Total Anggaran</h3><div class="big">'+rp(tot)+'</div><span class="chip">'+MO[cur]+'</span></div><div class="c"><h3>Anggaran Tercentang</h3><div class="big">'+rp(s.bud)+'</div><span class="chip">mengurangi sisa saldo</span></div><div class="c s2"><h3>Sisa Saldo Setelah Anggaran</h3><div class="big '+(s.bal>=0?"good":"badc")+'">'+rp(s.bal)+'</div><span class="chip">Pemasukan dikurangi pengeluaran, setoran tabungan, dan anggaran tercentang</span></div></div>'+
    '<div class="c"><h3>Anggaran Tetap Bulanan</h3><div class="sc"><table class="tb ang"><tr><th>Jenis Anggaran</th><th>Nominal</th><th>✓</th></tr>'+F+'</table></div>'+Btn("addF","","+ Tambah anggaran tetap","add")+'<p class="mut">Muncul otomatis setiap bulan. Nama dan nominal bisa diubah, baris bisa dihapus (berlaku untuk semua bulan). Centang untuk bulan '+MO[cur]+'.</p></div>'+
@@ -405,16 +415,38 @@ document.getElementById("addT").onclick=function(){S.m[cur].exp.push({n:"",a:"",
 function route(){var h=location.hash.slice(1);view=MENU.some(function(x){return x[0]===h})?h:"dashboard";render()}
 window.addEventListener("hashchange",route);route();
 (async function(){
+  var SUPABASE_URL="GANTI_DENGAN_PROJECT_URL_ANDA";
+  var SUPABASE_KEY="GANTI_DENGAN_ANON_PUBLIC_KEY_ANDA";
+  if(!window.supabase||SUPABASE_URL.indexOf("GANTI_DENGAN_")===0||SUPABASE_KEY.indexOf("GANTI_DENGAN_")===0){
+    st("Tersimpan di browser perangkat ini (isi URL & Key Supabase)");return}
   try{
-    if(window.claude){
-      var u=await claude.use("user"),db=await claude.use("db"),id=u&&db?await u.id():null;
-      if(id){ref=db.doc("data/users/"+id+"/budget");var sn=await ref.get();
-        if(sn.exists){S=norm(JSON.parse(JSON.stringify(sn.data())));try{localStorage.setItem("dompetku",JSON.stringify(S))}catch(e){}}
-        else await ref.set(JSON.parse(JSON.stringify(S)));
-        st("Tersinkron di semua perangkat ✓");render();return}
+    sbClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+    st("Menyinkronkan…");
+    var res=await sbClient.from("dompetku_data").select("data").eq("id",USER_RECORD_ID).maybeSingle();
+    if(res.error){
+      st("Gagal sinkron, tersimpan di perangkat ini");
+      console.error(res.error.message);
+      return;
     }
-  }catch(e){ref=null}
-  st("Tersimpan di browser perangkat ini")
+    if(res.data&&res.data.data){
+      S=norm(JSON.parse(JSON.stringify(res.data.data)));
+      try{localStorage.setItem("dompetku",JSON.stringify(S))}catch(e){}
+      st("Tersinkron di semua perangkat ✓");
+      render();
+    }else{
+      var up=await sbClient.from("dompetku_data").upsert({
+        id:USER_RECORD_ID,
+        data:JSON.parse(JSON.stringify(S)),
+        updated_at:new Date().toISOString()
+      });
+      if(up.error){st("Gagal sinkron, tersimpan di perangkat ini");console.error(up.error.message)}
+      else{st("Tersinkron di semua perangkat ✓")}
+    }
+  }catch(e){
+    sbClient=null;
+    st("Tersimpan di browser perangkat ini");
+    console.error(e);
+  }
 })();
 </script>
 </body>
