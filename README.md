@@ -1,39 +1,24 @@
-# Dompetku – Budgeting Keuangan
+# Dompetku – versi login (data per akun)
 
-Aplikasi budgeting keuangan satu halaman (HTML, CSS, JavaScript). Fitur: dashboard, transaksi, tabungan dan target, investasi, JHT BPJS, anggaran dan hutang, rekap 3 bulan.
+Setiap orang membuat akun sendiri (email + password). Data tiap akun tersimpan terpisah di Supabase dan hanya bisa dibaca pemiliknya.
 
-## Penyimpanan data
-- Data disimpan di **browser** (localStorage) dan disinkronkan ke **Supabase** (tabel `dompetku_data`, satu baris dengan `id` sesuai `USER_RECORD_ID` di `index.html`).
-- Jika Supabase tidak terhubung, aplikasi tetap jalan dan data tersimpan di browser perangkat itu saja.
-- Pengaturan Supabase ada di bagian bawah `index.html`: `SUPABASE_URL` dan `SUPABASE_KEY` (gunakan *Publishable key*, bukan *secret key*).
+## Isi paket
+- `index.html` – aplikasi dengan layar Daftar, Masuk, Lupa password, dan tombol Keluar
+- `supabase-login.sql` – aturan akses database (jalankan di SQL Editor)
 
-### Tabel Supabase (SQL Editor)
-```sql
-create table if not exists dompetku_data (
-  id text primary key,
-  data jsonb not null,
-  updated_at timestamptz default now()
-);
-alter table dompetku_data enable row level security;
-create policy "dompetku akses" on dompetku_data
-  for all using (true) with check (true);
-```
-Catatan keamanan: kebijakan di atas membuat siapa pun yang membuka situs dapat membaca dan mengubah baris data yang sama. Untuk data pribadi, sebaiknya tambahkan login (Supabase Auth) lalu batasi kebijakan ke pemilik data.
+## Urutan pemasangan (ikuti berurutan)
+1. **Pengaturan Supabase** (sudah Anda lakukan): Authentication > Sign In / Providers (Email aktif, Confirm email aktif) dan URL Configuration (Site URL dan Redirect URLs berisi alamat situs Vercel Anda).
+2. **Unggah `index.html` baru** ke repository GitHub (Add file > Upload files, ganti `index.html` lama, Commit). Vercel otomatis memasang ulang; cek di tab Deployments sampai berstatus Ready.
+3. **Buka situs, pilih "Belum punya akun? Daftar"**, isi email dan password (minimal 8 karakter). Buka email konfirmasi, klik tautannya, lalu masuk.
+4. **Pindahkan data lama Anda** (jika ada). Dua cara, pilih salah satu:
+   - Saat pertama masuk di browser yang sama dengan yang dulu dipakai, jika muncul pertanyaan "Impor data lama?", pilih OK.
+   - Atau di Supabase buka Authentication > Users, salin **User UID** akun Anda, lalu jalankan baris `update ...` di bagian A pada `supabase-login.sql` (hapus tanda `--` di depannya dan ganti `ID-AKUN-ANDA`). Muat ulang situs dan masuk.
+5. **Jalankan bagian B** pada `supabase-login.sql` untuk mengunci tabel. Setelah ini tanpa login tidak ada yang bisa membaca atau mengubah data.
+6. **Uji**: keluar, daftar akun kedua (email lain atau jendela penyamaran), pastikan datanya kosong dan tidak ada data akun pertama.
 
-## Cara publish ke GitHub Pages
-1. Buat repository baru di github.com (misalnya `dompetku`).
-2. Di terminal, dari folder ini:
-
-```bash
-git init
-git add .
-git commit -m "Dompetku"
-git branch -M main
-git remote add origin https://github.com/USERNAME/dompetku.git
-git push -u origin main
-```
-
-3. Di GitHub: **Settings → Pages → Source: Deploy from a branch → Branch: main → / (root) → Save**.
-4. Alamatnya: `https://USERNAME.github.io/dompetku/`
-
-Untuk memperbarui: ubah `index.html`, lalu `git add . && git commit -m "update" && git push`.
+## Catatan
+- `SUPABASE_KEY` di `index.html` adalah *Publishable key*. Boleh terlihat publik; yang melindungi data adalah aturan di langkah 5. Jangan pernah menaruh *secret key* atau *service role key* di file ini.
+- Email konfirmasi dan reset password memakai layanan email bawaan Supabase yang jumlahnya sangat terbatas per jam. Jika banyak pengguna mendaftar, atur SMTP sendiri (Authentication > Emails > SMTP Settings).
+- Proyek gratis Supabase berhenti sementara jika tidak dipakai sekitar seminggu dan bisa dihidupkan lagi dari dashboard.
+- Jika dibuka untuk umum, siapkan kebijakan privasi singkat karena data keuangan termasuk data pribadi.
+- Pendaftaran bebas bisa ditutup kapan saja di Authentication > Sign In / Providers (matikan "Allow new users to sign up").
