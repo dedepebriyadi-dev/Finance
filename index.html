@@ -208,6 +208,17 @@ body{line-height:1.5}
  .tb.stk td.w2{grid-column:1/3}.tb.stk td.del{grid-column:1/3;text-align:right}.tb.stk td:empty{display:none}
  .tb.stk tfoot tr{background:var(--in);padding:10px;border-radius:10px;margin-top:8px;border:0}
 }
+
+/* ===== efek sorot kartu (hover desktop / sentuh mobile) ===== */
+.c{isolation:isolate;transition:filter .4s ease,opacity .4s ease,transform .35s ease,box-shadow .35s ease}
+.c::before{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;opacity:0;pointer-events:none;background:linear-gradient(180deg,#fecf4e 0%,#fbba51 50%,#faa052 100%);transition:opacity .4s ease}
+.c.fx-hot::before{opacity:1}
+.c.fx-hot{transform:translateY(-4px);box-shadow:0 14px 30px rgba(250,160,82,.38);color:#2b1700}
+.c.fx-hot h3,.c.fx-hot .chip,.c.fx-hot .mut,.c.fx-hot small{color:#3d2400}
+.c.fx-hot .good{color:#0d5c37}.c.fx-hot .badc{color:#9b1c1c}
+.fx-on .c:not(.fx-hot){filter:grayscale(1) blur(1.5px);opacity:.5}
+.fx-on .c:not(.fx-hot):focus-within{filter:none;opacity:1}
+@media (prefers-reduced-motion:reduce){.c,.c::before{transition:none}}
 </style>
 </head>
 <body>
@@ -484,7 +495,7 @@ function render(){
   document.getElementById("nav").innerHTML=MENU.map(function(x){return '<a class="nav'+(x[0]===view?" on":"")+'" href="#'+x[0]+'" title="'+x[2]+'"><i class="ic '+x[1]+'"></i><span class="lb">'+x[2]+'</span></a>'}).join("");
   document.getElementById("bn").innerHTML=MENU.map(function(x){return '<a class="'+(x[0]===view?"on":"")+'" href="#'+x[0]+'"><i class="ic '+x[1]+'"></i>'+x[2].replace(" BPJS","")+'</a>'}).join("");
   var f={dashboard:vDash,transaksi:vTrx,tabungan:vSv,investasi:vInv,jht:vJht,anggaran:vAng,rekap:vRekap}[view];
-  paint(addCt(f()),view+":"+cur);fit()}
+  paint(addCt(f()),view+":"+cur);applyHot();fit()}
 function toEnd(t){try{t.setSelectionRange(t.value.length,t.value.length)}catch(x){}}
 V.addEventListener("input",function(e){var t=e.target,p=t.getAttribute("data-p");if(!p||t.type==="checkbox"||t.tagName==="SELECT")return;
   var v=t.value;
@@ -515,6 +526,16 @@ V.addEventListener("paste",function(e){var t=e.target,p=t.getAttribute&&t.getAtt
   var q=j.split("-"),y=q[0],r0=+q[1],c0=+q[2],d=jyear(y);
   txt.replace(/\r/g,"").replace(/\n+$/,"").split("\n").forEach(function(line,ri){line.split("\t").forEach(function(cell,cj){var rr=r0+ri,cc=c0+cj;if(rr>11||cc>=S.jht.cols.length)return;d[rr][cc]=pn(cell)})});
   save();render()});
+var hotI=-1,hotK=null,hotT=null;
+function applyHot(){var cs=V.querySelectorAll(".c");if(hotK!==null&&V.__k!==hotK)hotI=-1;hotK=V.__k;
+  V.classList.toggle("fx-on",hotI>=0&&hotI<cs.length);for(var i=0;i<cs.length;i++)cs[i].classList.toggle("fx-hot",i===hotI)}
+function setHot(i,hold){clearTimeout(hotT);
+  if(i<0){hotT=setTimeout(function(){hotI=-1;applyHot()},hold||140)}else{hotI=i;applyHot()}}
+function cardIdx(el){var c=el&&el.closest?el.closest(".c"):null;if(!c||!V.contains(c))return -1;return Array.prototype.indexOf.call(V.querySelectorAll(".c"),c)}
+V.addEventListener("pointerover",function(e){if(e.pointerType==="touch")return;setHot(cardIdx(e.target))});
+V.addEventListener("pointerleave",function(e){if(e.pointerType!=="touch")setHot(-1,60)});
+V.addEventListener("pointerdown",function(e){if(e.pointerType==="touch")setHot(cardIdx(e.target))});
+["pointerup","pointercancel"].forEach(function(ev){document.addEventListener(ev,function(e){if(e.pointerType==="touch")setHot(-1,700)})});
 var sel=document.getElementById("bulan");
 MO.forEach(function(m,i){var o=document.createElement("option");o.value=i;o.textContent=m;sel.appendChild(o)});
 sel.value=cur;sel.onchange=function(){cur=+sel.value;render()};
