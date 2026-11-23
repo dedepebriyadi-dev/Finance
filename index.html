@@ -191,6 +191,23 @@ body{line-height:1.5}
 .hero.red{background:linear-gradient(135deg,#dd7157 0%,#c14138 55%,#992120 100%)}
 @media (max-width:980px){.acct{display:flex;top:14px;right:14px}.ttlw{padding-right:60px}}
 .navout{margin-top:auto;display:flex;justify-content:center;align-items:center;width:44px;height:44px;border:0;border-radius:12px;background:transparent;cursor:pointer;padding:0}.navout:hover{background:var(--card)}
+
+/* ===== catatan hutang: pinjaman + pembayaran ===== */
+.hs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:2px 0 14px}.hs div{background:var(--in);border-radius:12px;padding:10px 12px}.hs small{display:block;color:var(--mut);font-size:12px}.hs b{font-size:15px}
+.c h3.h4{font-size:15px;margin:14px 0 8px}
+.tb.loan,.tb.pay{table-layout:fixed;min-width:0}
+.loan th:nth-child(2),.loan td:nth-child(2){width:170px}.loan th:nth-child(3),.loan td:nth-child(3),.loan th:nth-child(4),.loan td:nth-child(4){width:150px}.loan th:last-child,.loan td:last-child{width:44px}
+.pay th:nth-child(1),.pay td:nth-child(1){width:112px}.pay th:nth-child(3),.pay td:nth-child(3),.pay th:nth-child(4),.pay td:nth-child(4){width:170px}.pay th:last-child,.pay td:last-child{width:44px}
+@media (max-width:620px){
+ .hs{grid-template-columns:1fr}
+ .tb.stk,.tb.stk tbody,.tb.stk tfoot{display:block;width:100%;min-width:0}
+ .tb.stk tr.ih{display:none}
+ .tb.stk tr{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--bd)}
+ .tb.stk td{display:block;height:auto;border:0;padding:0;text-align:left;width:auto!important}
+ .tb.stk td[data-l]::before{content:attr(data-l);display:block;font-size:12px;color:var(--mut);margin-bottom:3px}
+ .tb.stk td.w2{grid-column:1/3}.tb.stk td.del{grid-column:1/3;text-align:right}.tb.stk td:empty{display:none}
+ .tb.stk tfoot tr{background:var(--in);padding:10px;border-radius:10px;margin-top:8px;border:0}
+}
 </style>
 </head>
 <body>
@@ -230,14 +247,14 @@ var MO=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","Sept
 var MS="JFMAMJJASOND".split("");
 var PAL=[["#3b82f6","#fff"],["#f59e0b","#3a2600"],["#22c55e","#06301c"],["#8b5cf6","#fff"],["#ec4899","#fff"],["#14b8a6","#fff"],["#f97316","#fff"],["#0ea5e9","#fff"]];
 var MENU=[["dashboard","dashboard","Dashboard","Rencanakan, pantau, dan capai target keuanganmu."],["transaksi","transaksi","Transaksi","Catat pemasukan, pengeluaran, dan atur kategori."],["tabungan","tabungan","Tabungan","Total tabungan dan target yang ingin dicapai."],["investasi","investasi","Investasi","Catat investasi dan lihat komposisinya."],["jht","jht","JHT BPJS","Catat saldo atau iuran JHT per bulan, per tahun."],["anggaran","anggaran","Anggaran","Rencanakan anggaran dan catat hutang."],["rekap","rekap","Rekap","Statistik pemasukan dan pengeluaran 3 bulan."]];
-function blank(){var m=[];for(var i=0;i<12;i++)m.push({inc:[],exp:[],ex:[],bud:[],fc:{}});return{cats:[{id:6,n:"Dana Darurat",p:20,s:0},{id:5,n:"Uang bulanan",p:15,s:0},{id:1,n:"Kebutuhan",p:15,s:0},{id:2,n:"Keinginan",p:30,s:0},{id:3,n:"Tabungan",p:20,s:1}],fx:1,m:m,sv0:0,tg:[],debt:[],bfix:[{id:1,n:"Kosan",a:""},{id:2,n:"Netflix",a:""},{id:3,n:"Freepik",a:""},{id:4,n:"Spotify",a:""}],bfn:5,inv:{rows:[],fx:1},jht:{cols:["Saldo Terkini"],years:[2025],data:{},v:2}}}
+function blank(){var m=[];for(var i=0;i<12;i++)m.push({inc:[],exp:[],ex:[],bud:[],fc:{}});return{cats:[{id:6,n:"Dana Darurat",p:20,s:0},{id:5,n:"Uang bulanan",p:15,s:0},{id:1,n:"Kebutuhan",p:15,s:0},{id:2,n:"Keinginan",p:30,s:0},{id:3,n:"Tabungan",p:20,s:1}],fx:1,m:m,sv0:0,tg:[],debt:[],loans:[],bfix:[{id:1,n:"Kosan",a:""},{id:2,n:"Netflix",a:""},{id:3,n:"Freepik",a:""},{id:4,n:"Spotify",a:""}],bfn:5,inv:{rows:[],fx:1},jht:{cols:["Saldo Terkini"],years:[2025],data:{},v:2}}}
 function norm(d){var b=blank();if(!d)return b;try{
  var old={};(d.cats||[]).forEach(function(c){old[c.id]=String(c.n||"").toLowerCase()});
  if(d.fx&&d.cats)b.cats.forEach(function(c){var o=d.cats.filter(function(x){return x.id===c.id||(c.id===6&&x.id===4)})[0];if(o){c.p=num(o.p);c.t=o.t||""}});
  function mapc(e){if(d.fx&&typeof e.c==="number")return e.c===4?1:e.c;var nm=typeof e.c==="number"?old[e.c]:String(e.c||"").toLowerCase();
   var f=b.cats.filter(function(c){return c.n.toLowerCase()===nm})[0];return f?f.id:1}
  for(var i=0;i<12;i++){var x=(d.m||[])[i];if(x){b.m[i].inc=x.inc||[];b.m[i].ex=x.ex||[];b.m[i].bud=x.bud||[];b.m[i].fc=x.fc||{};b.m[i].exp=(x.exp||[]).map(function(e){e.c=mapc(e);return e})}}
- b.tg=d.tg||[];b.sv0=num(d.sv0);b.debt=d.debt||[];if(d.bfix)b.bfix=d.bfix;b.bfn=d.bfn||b.bfix.reduce(function(a,x){return Math.max(a,x.id)},0)+1;if(d.inv&&d.inv.fx)b.inv=d.inv;else if(d.inv&&d.inv.rows){var vc=d.inv.vc;b.inv.rows=d.inv.rows.map(function(r){return [r[0]||"",vc>=0?r[vc]:"","",""]})}
+ b.tg=d.tg||[];b.sv0=num(d.sv0);b.debt=d.debt||[];b.loans=d.loans||[];if(d.bfix)b.bfix=d.bfix;b.bfn=d.bfn||b.bfix.reduce(function(a,x){return Math.max(a,x.id)},0)+1;if(d.inv&&d.inv.fx)b.inv=d.inv;else if(d.inv&&d.inv.rows){var vc=d.inv.vc;b.inv.rows=d.inv.rows.map(function(r){return [r[0]||"",vc>=0?r[vc]:"","",""]})}
  if(d.jht&&d.jht.cols&&d.jht.years){b.jht=d.jht;b.jht.data=b.jht.data||{};if(b.jht.cols.length!==1){for(var y in b.jht.data)b.jht.data[y]=(b.jht.data[y]||[]).map(function(r){return [(r||[]).reduce(function(a,v){return a+num(v)},0)||""]})}b.jht.cols=["Saldo Terkini"];if(!b.jht.v){b.jht.years=b.jht.years.filter(function(y,i){return i===0||(b.jht.data[y]||[]).some(function(r){return r&&r[0]!==""&&r[0]!=null})});b.jht.v=2}b.jht.years=b.jht.years.map(Number).sort(function(a,c){return a-c});if(!b.jht.years.length)b.jht.years=[2025]}
 }catch(e){}return b}
 var S=blank();
@@ -271,7 +288,7 @@ function sums(i){var d=S.m[i],r={i:0,e:0,c:{},sv:0,ex:0,bud:0,n:d.inc.length+d.e
 function fm(v){return v===""||v==null?"":(+v).toLocaleString("id-ID")}
 function pn(c){var t=String(c).replace(/[^0-9,.\-]/g,"");if(/,\d{1,2}$/.test(t))t=t.replace(/\./g,"").replace(",",".");else if(/^-?\d+\.\d{1,2}$/.test(t)){}else t=t.replace(/[.,]/g,"");var n=parseFloat(t);return isNaN(n)?"":Math.round(n*100)/100}
 function fk(n){n=Math.round(n);if(n>=1e9)return (n/1e9).toFixed(1).replace(".0","")+"M";if(n>=1e6)return (n/1e6).toFixed(1).replace(".0","")+"jt";if(n>=1e3)return Math.round(n/1e3)+"rb";return String(n)}
-function In(p,v,o){o=o||{};var a=o.m?'type="text" inputmode="decimal" data-m ':o.d?'type="text" inputmode="numeric" data-d ':o.n?'type="text" inputmode="numeric" data-n ':o.pc?'type="text" inputmode="decimal" data-pc ':'type="text" ';return '<input '+a+'data-p="'+p+'" value="'+esc(o.m?fm2(v):o.n?fm(v):v)+'"'+(o.ph?' placeholder="'+o.ph+'"':'')+(o.j?' data-j="'+o.j+'"':'')+(o.al?' style="text-align:right"':'')+'>'}
+function In(p,v,o){o=o||{};var a=o.m?'type="text" inputmode="decimal" data-m ':o.d?'type="text" inputmode="numeric" data-d ':o.n?'type="text" inputmode="numeric" data-n ':o.pc?'type="text" inputmode="decimal" data-pc ':'type="text" ';return '<input '+a+'data-p="'+p+'" value="'+esc(o.m?fm2(v):o.n?fm(v):v)+'"'+(o.ph?' placeholder="'+o.ph+'"':'')+(o.j?' data-j="'+o.j+'"':'')+(o.l?' list="dln"':'')+(o.al?' style="text-align:right"':'')+'>'}
 function dfmt(raw,add){var d=raw.replace(/\D/g,""),p=["","",""],i=0,k=0;
   while(k<d.length&&i<3){var c=d.charAt(k++);
     if(i<2){var mx=i===0?3:1,lim=i===0?31:12;
@@ -398,11 +415,24 @@ function vAng(){var s=sums(cur),d=S.m[cur],b="m."+cur;
   var ft=S.bfix.reduce(function(a,r){return a+num(r.a)},0),mt=d.bud.reduce(function(a,r){return a+num(r.a)},0),tot=ft+mt,ht=S.debt.reduce(function(a,r){return a+num(r.a)},0);
   var F=S.bfix.map(function(r,k){return '<tr><td>'+In("bfix."+k+".n",r.n,{ph:"Jenis anggaran"})+'</td><td>'+In("bfix."+k+".a",r.a,{m:1,ph:"0,00"})+'</td><td><div class="ck3"><input type="checkbox" data-p="'+b+'.fc.'+r.id+'"'+(d.fc[r.id]?" checked":"")+' aria-label="Centang jika dipakai bulan ini">'+Btn("delF",k,"✕")+'</div></td></tr>'}).join("");
   var B=d.bud.map(function(r,k){return '<tr><td>'+In(b+".bud."+k+".n",r.n,{ph:"Jenis anggaran"})+'</td><td>'+In(b+".bud."+k+".a",r.a,{m:1,ph:"0,00"})+'</td><td><div class="ck3"><input type="checkbox" data-p="'+b+".bud."+k+".d"+'"'+(r.d?" checked":"")+' aria-label="Centang jika dipakai">'+Btn("delB",k,"✕")+'</div></td></tr>'}).join("");
-  var H=S.debt.map(function(r,k){return '<tr><td>'+In("debt."+k+".t",r.t||"",{d:1,ph:"00/00/00"})+'</td><td>'+In("debt."+k+".n",r.n,{ph:"Catatan"})+'</td><td><div class="hd">'+In("debt."+k+".a",r.a,{m:1,ph:"0,00"})+Btn("delD",k,"✕")+'</div></td></tr>'}).join("");
+  var nk=function(x){return String(x||"").trim().toLowerCase()},LN={},paid={},cum={},lt=0,lp=0;
+  S.loans.forEach(function(l){var k=nk(l.n);if(k&&!(k in LN))LN[k]=l});
+  S.debt.forEach(function(r){var k=nk(r.n);if(k&&k in LN)paid[k]=(paid[k]||0)+num(r.a)});
+  function rest(v,a){return a===""||a==null?'<span class="mut">–</span>':(v>0?'<b>'+fm2(v)+'</b>':(v===0?'<b class="good">Lunas</b>':'<b class="badc">Lebih '+fm2(-v)+'</b>'))}
+  var LR=S.loans.map(function(l,k){var kk=nk(l.n),pd=(kk&&LN[kk]===l)?(paid[kk]||0):0;lt+=num(l.a);lp+=pd;
+    return '<tr><td class="w2" data-l="Nama">'+In("loans."+k+".n",l.n,{ph:"Nama peminjam"})+'</td><td data-l="Dipinjam (Rp)">'+In("loans."+k+".a",l.a,{m:1,ph:"0,00"})+'</td><td class="num" data-l="Sudah dibayar (Rp)">'+fm2(pd)+'</td><td class="num" data-l="Sisa (Rp)">'+rest(num(l.a)-pd,l.a)+'</td><td class="del">'+Btn("delL",k,"✕")+'</td></tr>'}).join("");
+  var H=S.debt.map(function(r,k){var kk=nk(r.n),rs='<span class="mut">–</span>';
+    if(kk&&kk in LN){cum[kk]=(cum[kk]||0)+num(r.a);rs=rest(num(LN[kk].a)-cum[kk],LN[kk].a)}
+    return '<tr><td data-l="Tanggal">'+In("debt."+k+".t",r.t||"",{d:1,ph:"00/00/00"})+'</td><td data-l="Catatan (nama)">'+In("debt."+k+".n",r.n,{ph:"Nama peminjam",l:1})+'</td><td data-l="Nominal (Rp)">'+In("debt."+k+".a",r.a,{m:1,ph:"0,00"})+'</td><td class="num" data-l="Sisa setelah bayar (Rp)">'+rs+'</td><td class="del">'+Btn("delD",k,"✕")+'</td></tr>'}).join("");
+  var lrest=lt-lp,um=ht-Object.keys(paid).reduce(function(a,k){return a+paid[k]},0);
   return '<div class="cards" style="margin-bottom:12px"><div class="c hero red"><h3>Total Anggaran</h3><div class="big">'+rp(tot)+'</div><span class="chip">'+MO[cur]+'</span></div><div class="c"><h3>Anggaran Tercentang</h3><div class="big">'+rp(s.bud)+'</div><span class="chip">mengurangi sisa saldo</span></div><div class="c s2 hero'+(s.bal<0?" red":"")+'"><h3>Sisa Saldo Setelah Anggaran</h3><div class="big">'+rp(s.bal)+'</div><span class="chip">Pemasukan dikurangi pengeluaran, setoran tabungan, dan anggaran tercentang</span></div></div>'+
    '<div class="c"><h3>Anggaran Tetap Bulanan</h3><div class="sc"><table class="tb ang"><tr><th>Jenis Anggaran</th><th>Nominal</th><th>✓</th></tr>'+F+'</table></div>'+Btn("addF","","+ Tambah anggaran tetap","add")+'<p class="mut">Muncul otomatis setiap bulan. Nama dan nominal bisa diubah, baris bisa dihapus (berlaku untuk semua bulan). Centang untuk bulan '+MO[cur]+'.</p></div>'+
    '<div class="c"><h3>Anggaran Tambahan · '+MO[cur]+'</h3><div class="sc"><table class="tb ang"><tr><th>Jenis Anggaran</th><th>Nominal</th><th>✓</th></tr>'+B+'</table></div>'+Btn("addB","","+ Tambah anggaran","add")+'<p class="mut">Hanya untuk bulan ini. Centang anggaran yang sudah dipakai; nominalnya otomatis mengurangi sisa saldo.</p></div>'+
-   '<div class="c"><h3>Catatan Hutang</h3><div class="sc"><table class="tb dbt"><tr><th>Tanggal</th><th>Catatan</th><th>Nominal</th></tr>'+H+'<tfoot><tr><td colspan="2">Total hutang dibayar</td><td class="num">'+rp(ht)+'</td></tr></tfoot></table></div>'+Btn("addD","","+ Tambah catatan","add")+'</div>'}
+      '<div class="c"><h3>Catatan Hutang</h3><datalist id="dln">'+S.loans.filter(function(l){return nk(l.n)}).map(function(l){return '<option value="'+esc(l.n)+'">'}).join("")+'</datalist>'+
+   '<div class="hs"><div><small>Total dipinjam</small><b>'+rp(lt)+'</b></div><div><small>Sudah dibayar</small><b class="good">'+rp(lp)+'</b></div><div><small>Sisa belum dibayar</small><b class="'+(lrest>0?"":"good")+'">'+rp(lrest)+'</b></div></div>'+
+   (um>0.005?'<p class="mut"><b class="badc">Perhatian:</b> pembayaran sebesar '+rp(um)+' belum cocok dengan nama di tabel Pinjaman (nama harus sama).</p>':'')+
+   '<h3 class="h4">Pinjaman</h3><div class="sc"><table class="tb stk loan"><tr class="ih"><th>Nama</th><th>Dipinjam (Rp)</th><th class="num">Sudah dibayar (Rp)</th><th class="num">Sisa (Rp)</th><th></th></tr>'+LR+'<tfoot><tr><td class="w2">Total</td><td class="num" data-l="Dipinjam (Rp)">'+fm2(lt)+'</td><td class="num" data-l="Sudah dibayar (Rp)">'+fm2(lp)+'</td><td class="num" data-l="Sisa (Rp)">'+fm2(lrest)+'</td><td></td></tr></tfoot></table></div>'+Btn("addL","","+ Tambah pinjaman","add")+
+   '<h3 class="h4" style="margin-top:22px">Pembayaran</h3><div class="sc"><table class="tb stk pay"><tr class="ih"><th>Tanggal</th><th>Catatan (nama)</th><th>Nominal (Rp)</th><th class="num">Sisa setelah bayar (Rp)</th><th></th></tr>'+H+'<tfoot><tr><td class="w2" colspan="2">Total hutang dibayar</td><td class="num" data-l="Total (Rp)">'+fm2(ht)+'</td><td></td><td></td></tr></tfoot></table></div>'+Btn("addD","","+ Tambah pembayaran","add")+'<p class="mut">Isi nama yang sama di tabel Pinjaman dan di kolom Catatan pembayaran agar Sudah dibayar dan Sisa dihitung otomatis.</p></div>'}
 
 var acts={
  tgc:function(x){COL[x]=!COL[x];try{localStorage.setItem("dompetku_cl",JSON.stringify(COL))}catch(e){}},
@@ -411,6 +441,7 @@ var acts={
  rstM:function(){if(pend!=="m"){pend="m";setTimeout(function(){if(pend==="m"){pend=null;render()}},6000);return}pend=null;var d=S.m[cur];d.inc=[];d.exp=[];d.ex=[];d.bud=[];d.fc={}},
  rstY:function(){if(pend!=="y"){pend="y";setTimeout(function(){if(pend==="y"){pend=null;render()}},6000);return}pend=null;for(var i=0;i<12;i++){var q=sums(i);S.sv0=num(S.sv0)+q.sv+q.ex;var d=S.m[i];d.inc=[];d.exp=[];d.ex=[];d.bud=[];d.fc={}}},
  addF:function(){S.bfix.push({id:S.bfn++,n:"",a:""})},delF:function(x){S.bfix.splice(x,1)},claim:function(){var L=jlast();S.jht.claim=S.jht.claim?null:{p:L.pos}},
+ addL:function(){S.loans.push({n:"",a:""})},delL:function(x){S.loans.splice(x,1)},
  addX:function(){S.m[cur].ex.push({n:"",a:""})},delX:function(x){S.m[cur].ex.splice(x,1)},addB:function(){S.m[cur].bud.push({n:"",a:"",d:0})},delB:function(x){S.m[cur].bud.splice(x,1)},addD:function(){S.debt.push({n:"",a:""})},delD:function(x){S.debt.splice(x,1)},
  mo:function(x){cur=x;document.getElementById("bulan").value=x},
  demo:function(){var g=S.m[cur];g.inc=[{n:"Gaji",a:5000000},{n:"Usaha sampingan",a:1000000}];g.exp=[{n:"Dana darurat",a:300000,c:6},{n:"Uang bulanan",a:500000,c:5},{n:"Listrik",a:400000,c:1},{n:"Makan di restoran",a:300000,c:2},{n:"Tabungan bulanan",a:1000000,c:3}]},
